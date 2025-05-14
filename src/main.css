@@ -1,0 +1,15 @@
+/* Overall background and font */
+body {
+    background: linear-gradient(135deg, #d6eaf8, #ebf5fb);
+    font-family: 'Quicksand', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+  }
+
+.button{
+    font-family: 'Quicksand', sans-serif;
+}
+  
+  /* Import a calming font */
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
