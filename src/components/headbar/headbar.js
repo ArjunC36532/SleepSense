@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../components/headbar.css'
-import '../main.css'
+import './headbar.css'
 import { signOut } from 'firebase/auth';
-import { auth } from '../pages/firebase'; 
-import {useNavigate} from 'react-router-dom';
+import { auth } from '../../pages/firebase'; 
+import {useNavigate, Link} from 'react-router-dom';
 
 
 function HeadBar(){
@@ -22,12 +21,11 @@ function HeadBar(){
 
     return (
         <div className="top-bar">
-          <div className="section">Self-Assess</div>
-          <div className="section">Sleep Info</div>
-          <div className="section">Log Sleep</div>
-          <div className="section" onClick={HandleSignOut}>Sign Out</div>
+            <Link to="/self-assess-page" className="section">Self-Assess</Link>
+            <Link to="/log-sleep-page" className="section">Log Sleep</Link>
+            <div className="section" onClick={HandleSignOut}>Sign Out</div>
         </div>
-      );
+    );
 }
 
 export default HeadBar;

@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #fafbfc;
+  }
+  
+  .diagnose-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+    line-height: 1.7;
+  }
+  
+  .diagnose-heading {
+    font-size: 2.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #1e1e1e;
+  }
+  
+  .diagnose-summary {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+  }
+  
+  .diagnose-resources {
+    margin-bottom: 3rem;
+    max-width: 600px;
+  }
+  
+  .diagnose-resources h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .diagnose-resources ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  
+  .diagnose-resources li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .diagnose-resources a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .diagnose-resources a:hover {
+    text-decoration: underline;
+  }
+  
+  .diagnose-disclaimer {
+    font-size: 0.85rem;
+    color: #777;
+    max-width: 600px;
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
+    margin-top: 2rem;
+  }
+  

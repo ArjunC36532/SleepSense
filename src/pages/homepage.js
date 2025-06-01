@@ -27,7 +27,7 @@ function HomePage() {
         <div>
             {
             user? (
-                navigate('/mainpage')
+                navigate('/self-assess-page')
             ) : (
                 navigate('/loginpage')
             )
