@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from './firebase';
+import axios from 'axios';
 import './signup.css';
 
 const SignupPage = () => {
@@ -31,8 +32,20 @@ const SignupPage = () => {
         }
 
         try {
+            // Create user in Firebase
             await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-            navigate('/');
+            
+            // Add user to backend database
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/add-user', {
+                    user_name: formData.email
+                });
+                console.log(response.data);
+                navigate('/');
+            } catch (backendError) {
+                console.error('Error adding user to database:', backendError);
+                setError('Account created but there was an error setting up your profile. Please try logging in.');
+            }
         } catch (err) {
             // Get the specific error message from Firebase
             const errorMessage = err.message;

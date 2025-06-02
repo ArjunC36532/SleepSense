@@ -1,0 +1,16 @@
+Age
+Sleep Duration (hours)
+Quality of Sleep (scale: 1-10)
+Physical Activity Level (minutes/day)
+Stress Level (scale: 1-10)
+Daily Steps
+Gender_Female
+Gender_Male
+Occupation_Manual Labor
+Occupation_Office Worker
+Occupation_Retired
+Occupation_Student
+BMI Category_Normal
+BMI Category_Obese
+BMI Category_Overweight
+BMI Category_Underweight

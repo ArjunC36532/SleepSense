@@ -1,0 +1,194 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import joblib
+from fastapi.middleware.cors import CORSMiddleware
+from postgres import DataBase
+from postgres import EntryData
+
+app = FastAPI()
+
+# Define the allowed origins
+origins = [
+    "http://localhost:3000",  # React dev server
+    "http://127.0.0.1:3000"
+]
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Or use ["*"] to allow all
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
+
+class Data(BaseModel):
+    age: int = None
+    sleep_duration: float = None
+    quality_of_sleep: int = None
+    phys_activity_level: int = None
+    stress_level: int = None
+    daily_steps: int = None
+    gender: str = ""
+    weight: str = ""
+    height: str = ""
+
+    def get_features(self):
+        gender_male = self.gender.lower() == 'male'
+        gender_female = not gender_male
+
+        bmi = float(self.weight) / (float(self.height) ** 2)  # assuming height is in meters
+        BMI_obese = bmi > 29.9
+        BMI_overweight = 24.9 < bmi <= 29.9
+        BMI_normal = bmi <= 24.9
+
+        return [self.age, self.sleep_duration, self.quality_of_sleep, self.phys_activity_level,
+                self.stress_level, self.daily_steps, gender_female, gender_male, BMI_normal,
+                BMI_normal,
+                BMI_overweight, BMI_obese
+                ]
+
+class QuestionareData(BaseModel):
+    user_id: int = None
+    age: int = None
+    gender: str = None
+    occupation: str = None
+    weight: str = None
+    height: str = None
+
+class UserData(BaseModel):
+    user_name: str = None
+
+
+model = joblib.load('model.joblib')
+database = []
+
+
+@app.get('/')
+def root():
+    return {"Hello": "World"}
+
+
+@app.post('/upload-data')
+def upload_data(data: Data):
+    database.append(data)
+
+
+@app.post("/predict")
+def predict(data: QuestionareData):
+    # Format Data
+    # Send to model and get output
+
+    # Create list of properly formatted data to send to model
+    features = []
+    features.append(data.age)
+    
+    # Calculate avg sleep_duration
+    avg_sleep_duration = DataBase.calculate_average(data.user_id, "hours_of_sleep")
+    features.append(avg_sleep_duration)
+
+    # Calculate avg sleep quality
+    avg_sleep_quality = DataBase.calculate_average(data.user_id, "sleep_quality")
+    features.append(avg_sleep_quality)
+
+    # Calculate avg phys activity level
+    avg_phys_activity = DataBase.calculate_average(data.user_id, "physical_activity_minutes")
+    features.append(avg_phys_activity)
+
+
+    # Calculate avg stress level
+    avg_stress_level = DataBase.calculate_average(data.user_id, "stress_level")
+    features.append(avg_stress_level)
+
+    # Calculate avg steps
+    avg_steps = DataBase.calculate_average(data.user_id, "total_steps")
+    features.append(avg_steps)
+
+    # Set gender vars
+    gender_female, gender_male = False, False
+    if data.gender == "male":
+        gender_male = True
+    else:
+        gender_female = True
+
+    features.append(gender_female)
+    features.append(gender_male)
+
+    # Set occupation vars
+    manual_labor, office_worker, retired, student = False, False, False, False
+    if data.occupation == "manual_labor":
+        manual_labor = True
+    if data.occupation == "office_worker":
+        office_worker = True
+    if data.occupation == "retired":
+        retired = True
+    if data.occupation == "student":
+        student = True
+    
+    features.append(manual_labor)
+    features.append(office_worker)
+    features.append(retired)
+    features.append(student)
+
+    # calculate bmi
+    bmi = round(float(data.weight) / (float(data.height) ** 2), 1)
+
+    normal, obese, overweight, underweight = False, False, False, False
+
+    if bmi > 30:
+        obese = True
+    if bmi >= 25 and bmi <= 29.9:
+        overweight = True
+    if bmi >= 18.5 and bmi <= 24.9:
+        normal = True
+    if bmi < 18.5:
+        underweight = True
+
+    features.append(normal)
+    features.append(obese)
+    features.append(overweight)
+    features.append(underweight)
+
+    # make prediction
+    model = joblib.load("model/model.pkl")
+    prediction = model.predict([features])
+    return prediction[0]
+
+
+@app.post("/add-user")
+def add_user(data: UserData):
+    DataBase.add_user(data.user_name)
+    return {"received_user_name": data.user_name}
+
+
+@app.post("/add-entry")
+def add_entry(data: EntryData):
+    result = DataBase.add_entry(data)
+    if result == "success":
+        return {"status": "success", "message": "Entry added successfully"}
+    else:
+        raise HTTPException(status_code=500, detail=str(result[1]))
+
+
+@app.post("/get-userid")
+def get_userid(email: str = None):
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    id = DataBase.get_userid(email)
+    if id is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"user_id": id}
+
+@app.post("/get-sleep-data")
+def get_sleep_data(user_id: int, this_week: bool, last_week: bool, this_month: bool):
+    if not any([this_week, last_week, this_month]):
+        raise HTTPException(status_code=400, detail="At least one time period must be selected")
+    
+    data = DataBase.get_sleep_data(user_id, this_week, last_week, this_month)
+    return data
+
+
+
+    
+    

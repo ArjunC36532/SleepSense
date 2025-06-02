@@ -1,0 +1,12 @@
+Age
+Sleep Duration
+Quality of Sleep
+Physical Activity Level
+Stress Level
+Daily Steps
+Gender_Female
+Gender_Male
+BMI Category_Normal
+BMI Category_Normal Weight
+BMI Category_Obese
+BMI Category_Overweight
