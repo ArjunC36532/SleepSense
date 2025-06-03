@@ -23,7 +23,7 @@ function Questionare() {
                 return;
             }
 
-            const userResponse = await axios.post(`http://127.0.0.1:8000/get-userid?email=${email}`);
+            const userResponse = await axios.post(`http://50.18.83.69/get-userid?email=${email}`);
             const user_id = userResponse.data.user_id;
             console.log(user_id)
         
@@ -39,7 +39,7 @@ function Questionare() {
             console.log("Submit Clicked");
       
             // Upload Data
-            const response = await axios.post("http://127.0.0.1:8000/predict", data);
+            const response = await axios.post("http://50.18.83.69/predict", data);
             console.log(response.data);
             
             // Route to appropriate diagnosment page

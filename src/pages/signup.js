@@ -37,7 +37,7 @@ const SignupPage = () => {
             
             // Add user to backend database
             try {
-                const response = await axios.post('http://127.0.0.1:8000/add-user', {
+                const response = await axios.post('http://50.18.83.69/add-user', {
                     user_name: formData.email
                 });
                 console.log(response.data);

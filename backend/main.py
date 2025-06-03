@@ -10,7 +10,9 @@ app = FastAPI()
 # Define the allowed origins
 origins = [
     "http://localhost:3000",  # React dev server
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
+    "https://sleep-sense.vercel.app/",
+    "http://50.18.83.69"
 ]
 
 # Add CORS middleware
