@@ -21,6 +21,8 @@ const SelfAssessStart = () => {
                     <p className="self-assess-description">
                         Take our comprehensive sleep assessment to understand your sleep patterns better. 
                         We'll analyze your responses and provide personalized insights to help improve your sleep quality.
+                        We strongly reccomend you take this assessment after you have logged your sleep data for a few days. 
+                        The more data you provide, the more accurate the assessment will be.
                     </p>
                     <button className="start-button" onClick={handleStart}>
                         Start Assessment
