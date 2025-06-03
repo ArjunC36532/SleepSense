@@ -52,6 +52,18 @@
   letter-spacing: 0.2px;
 }
 
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
 .age-input {
   width: 200px;
   padding: 12px 16px;
@@ -68,6 +80,16 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
   background-color: white;
+}
+
+.age-input.error {
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+
+.age-input.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
 }
 
 .submit-button {

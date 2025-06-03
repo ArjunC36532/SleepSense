@@ -33,7 +33,7 @@ function LogSleep() {
                 return;
             }
 
-            const userResponse = await axios.post(`http://50.18.83.69/get-userid?email=${email}`);
+            const userResponse = await axios.post(`http://127.0.0.1:8000/get-userid?email=${email}`);
             const user_id = userResponse.data.user_id;
 
             const data = {
@@ -49,7 +49,7 @@ function LogSleep() {
 
             console.log('Sending data to server:', data); // Debug log
 
-            const response = await axios.post(`http://50.18.83.69/add-entry`, data);
+            const response = await axios.post(`http://127.0.0.1:8000/add-entry`, data);
             
             if (response.data.status === "success") {
                 setDate('');
