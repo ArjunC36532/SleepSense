@@ -6,4 +6,4 @@ dotenv
 supabase
 datetime
 uvicorn
-sklearn
+scikit-learn
