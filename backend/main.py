@@ -1,11 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from typing import TypedDict
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
 from postgres import DataBase
 from postgres import EntryData
+from mangum import Mangum
 
 app = FastAPI()
+handler = Mangum(app)
 
 # Define the allowed origins
 origins = [
@@ -24,42 +26,43 @@ app.add_middleware(
 )
 
 
-class Data(BaseModel):
-    age: int = None
-    sleep_duration: float = None
-    quality_of_sleep: int = None
-    phys_activity_level: int = None
-    stress_level: int = None
-    daily_steps: int = None
-    gender: str = ""
-    weight: str = ""
-    height: str = ""
+class Data(TypedDict):
+    age: int
+    sleep_duration: float
+    quality_of_sleep: int
+    phys_activity_level: int
+    stress_level: int
+    daily_steps: int
+    gender: str
+    weight: str
+    height: str
 
-    def get_features(self):
-        gender_male = self.gender.lower() == 'male'
+    @staticmethod
+    def get_features(data: 'Data'):
+        gender_male = data['gender'].lower() == 'male'
         gender_female = not gender_male
 
-        bmi = float(self.weight) / (float(self.height) ** 2)  # assuming height is in meters
+        bmi = float(data['weight']) / (float(data['height']) ** 2)  # assuming height is in meters
         BMI_obese = bmi > 29.9
         BMI_overweight = 24.9 < bmi <= 29.9
         BMI_normal = bmi <= 24.9
 
-        return [self.age, self.sleep_duration, self.quality_of_sleep, self.phys_activity_level,
-                self.stress_level, self.daily_steps, gender_female, gender_male, BMI_normal,
+        return [data['age'], data['sleep_duration'], data['quality_of_sleep'], data['phys_activity_level'],
+                data['stress_level'], data['daily_steps'], gender_female, gender_male, BMI_normal,
                 BMI_normal,
                 BMI_overweight, BMI_obese
                 ]
 
-class QuestionareData(BaseModel):
-    user_id: int = None
-    age: int = None
-    gender: str = None
-    occupation: str = None
-    weight: str = None
-    height: str = None
+class QuestionareData(TypedDict):
+    user_id: int
+    age: int
+    gender: str
+    occupation: str
+    weight: str
+    height: str
 
-class UserData(BaseModel):
-    user_name: str = None
+class UserData(TypedDict):
+    user_name: str
 
 
 model = joblib.load('model.joblib')
@@ -83,32 +86,31 @@ def predict(data: QuestionareData):
 
     # Create list of properly formatted data to send to model
     features = []
-    features.append(data.age)
+    features.append(data['age'])
     
     # Calculate avg sleep_duration
-    avg_sleep_duration = DataBase.calculate_average(data.user_id, "hours_of_sleep")
+    avg_sleep_duration = DataBase.calculate_average(data['user_id'], "hours_of_sleep")
     features.append(avg_sleep_duration)
 
     # Calculate avg sleep quality
-    avg_sleep_quality = DataBase.calculate_average(data.user_id, "sleep_quality")
+    avg_sleep_quality = DataBase.calculate_average(data['user_id'], "sleep_quality")
     features.append(avg_sleep_quality)
 
     # Calculate avg phys activity level
-    avg_phys_activity = DataBase.calculate_average(data.user_id, "physical_activity_minutes")
+    avg_phys_activity = DataBase.calculate_average(data['user_id'], "physical_activity_minutes")
     features.append(avg_phys_activity)
 
-
     # Calculate avg stress level
-    avg_stress_level = DataBase.calculate_average(data.user_id, "stress_level")
+    avg_stress_level = DataBase.calculate_average(data['user_id'], "stress_level")
     features.append(avg_stress_level)
 
     # Calculate avg steps
-    avg_steps = DataBase.calculate_average(data.user_id, "total_steps")
+    avg_steps = DataBase.calculate_average(data['user_id'], "total_steps")
     features.append(avg_steps)
 
     # Set gender vars
     gender_female, gender_male = False, False
-    if data.gender == "male":
+    if data['gender'] == "male":
         gender_male = True
     else:
         gender_female = True
@@ -118,13 +120,13 @@ def predict(data: QuestionareData):
 
     # Set occupation vars
     manual_labor, office_worker, retired, student = False, False, False, False
-    if data.occupation == "manual_labor":
+    if data['occupation'] == "manual_labor":
         manual_labor = True
-    if data.occupation == "office_worker":
+    if data['occupation'] == "office_worker":
         office_worker = True
-    if data.occupation == "retired":
+    if data['occupation'] == "retired":
         retired = True
-    if data.occupation == "student":
+    if data['occupation'] == "student":
         student = True
     
     features.append(manual_labor)
@@ -133,7 +135,7 @@ def predict(data: QuestionareData):
     features.append(student)
 
     # calculate bmi
-    bmi = round(float(data.weight) / (float(data.height) ** 2), 1)
+    bmi = round(float(data['weight']) / (float(data['height']) ** 2), 1)
 
     normal, obese, overweight, underweight = False, False, False, False
 
@@ -159,8 +161,8 @@ def predict(data: QuestionareData):
 
 @app.post("/add-user")
 def add_user(data: UserData):
-    DataBase.add_user(data.user_name)
-    return {"received_user_name": data.user_name}
+    DataBase.add_user(data['user_name'])
+    return {"received_user_name": data['user_name']}
 
 
 @app.post("/add-entry")

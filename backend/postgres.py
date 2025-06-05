@@ -1,5 +1,4 @@
-import psycopg2
-from pydantic import BaseModel
+from typing import TypedDict
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
@@ -12,15 +11,15 @@ key = os.environ.get("KEY")
 
 supabase = create_client(url, key)
 
-class EntryData(BaseModel):
-    user_id:int = None
-    date: str = None
-    hours_of_sleep: float = None
-    sleep_quality: int = None
-    physical_activity_minutes: int = None
-    stress_level: int = None
-    total_steps: int = None
-    day: str = None
+class EntryData(TypedDict):
+    user_id: int
+    date: str
+    hours_of_sleep: float
+    sleep_quality: int
+    physical_activity_minutes: int
+    stress_level: int
+    total_steps: int
+    day: str
 
 
 class DataBase:
@@ -30,10 +29,9 @@ class DataBase:
         supabase.table("users").insert({"username": username}).execute()
 
     @staticmethod
-    def add_entry(data):
-        # Convert Pydantic model to dictionary
-        data_dict = data.model_dump()
-        supabase.table("sleep_data").insert(data_dict).execute()
+    def add_entry(data: EntryData):
+        # TypedDict is already a dictionary, so we can use it directly
+        supabase.table("sleep_data").insert(data).execute()
         return "success"
 
     @staticmethod

@@ -1,0 +1,7 @@
+fastapi 
+joblib
+postgres 
+mangum
+dotenv
+supabase
+datetime
