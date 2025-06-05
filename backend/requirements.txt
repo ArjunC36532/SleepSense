@@ -5,3 +5,4 @@ mangum
 dotenv
 supabase
 datetime
+uvicorn

@@ -4,10 +4,8 @@ import joblib
 from fastapi.middleware.cors import CORSMiddleware
 from postgres import DataBase
 from postgres import EntryData
-from mangum import Mangum
 
 app = FastAPI()
-handler = Mangum(app)
 
 # Define the allowed origins
 origins = [
