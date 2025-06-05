@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing_extensions import TypedDict
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client

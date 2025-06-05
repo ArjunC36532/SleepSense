@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from typing import TypedDict
+from typing_extensions import TypedDict
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
 from postgres import DataBase
