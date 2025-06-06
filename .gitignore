@@ -25,3 +25,5 @@ yarn-error.log*
 .env
 /backend/lib
 /backend/lambda_function.zip
+
+node_modules/
