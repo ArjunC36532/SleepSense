@@ -11,8 +11,8 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",  # React dev server
     "http://127.0.0.1:3000",
-    "https://sleep-sense.vercel.app/",
-    "sleep-sense-lezvsmrrs-arjun-chaudharys-projects.vercel.app"
+    "https://sleep-sense.vercel.app",
+    "https://sleep-sense-lezvsmrrs-arjun-chaudharys-projects.vercel.app"
 ]
 
 # Add CORS middleware
