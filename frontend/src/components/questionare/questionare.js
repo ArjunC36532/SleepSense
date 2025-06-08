@@ -67,7 +67,7 @@ function Questionare() {
                 return;
             }
 
-            const userResponse = await axios.post(`https://sleepsense.onrender.com/get-userid?email=${email}`);
+            const userResponse = await axios.post(`https://tplinux.taile388eb.ts.net/get-userid?email=${email}`);
             const user_id = userResponse.data.user_id;
         
             const data = {
@@ -80,7 +80,7 @@ function Questionare() {
             };
 
             // Upload Data
-            const response = await axios.post("https://sleepsense.onrender.com/predict", data);
+            const response = await axios.post("https://tplinux.taile388eb.ts.net/predict", data);
             
             // Route to appropriate diagnosis page
             navigate('/diagnose-page', {state: {result: response.data}});

@@ -37,7 +37,7 @@ const SignupPage = () => {
             
             // Add user to backend database
             try {
-                const response = await axios.post('https://sleepsense.onrender.com/add-user', {
+                const response = await axios.post('https://tplinux.taile388eb.ts.net/add-user', {
                     user_name: formData.email
                 });
                 console.log(response.data);

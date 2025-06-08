@@ -26,7 +26,7 @@ function LineChart({ timeFilter = 'week', dataKey = 'sleepHours'}) {
                 }
 
                 // First get the user_id
-                const userResponse = await axios.post(`https://sleepsense.onrender.com/get-userid?email=${email}`);
+                const userResponse = await axios.post(`https://tplinux.taile388eb.ts.net/get-userid?email=${email}`);
                 const user_id = userResponse.data.user_id;
 
                 // Set time period parameters based on timeFilter
@@ -36,7 +36,7 @@ function LineChart({ timeFilter = 'week', dataKey = 'sleepHours'}) {
 
                 // Then get the sleep data using query parameters
                 const response = await axios.post(
-                    `https://sleepsense.onrender.com/get-sleep-data?user_id=${user_id}&this_week=${this_week}&last_week=${last_week}&this_month=${this_month}`
+                    `https://tplinux.taile388eb.ts.net/get-sleep-data?user_id=${user_id}&this_week=${this_week}&last_week=${last_week}&this_month=${this_month}`
                 );
                 setData(response.data);
             } catch (error) {

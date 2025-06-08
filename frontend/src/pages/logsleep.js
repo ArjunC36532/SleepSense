@@ -33,7 +33,7 @@ function LogSleep() {
                 return;
             }
 
-            const userResponse = await axios.post(`https://sleepsense.onrender.com/get-userid?email=${email}`);
+            const userResponse = await axios.post(`https://tplinux.taile388eb.ts.net/get-userid?email=${email}`);
             const user_id = userResponse.data.user_id;
 
             const data = {
@@ -49,7 +49,7 @@ function LogSleep() {
 
             console.log('Sending data to server:', data); // Debug log
 
-            const response = await axios.post(`https://sleepsense.onrender.com/add-entry`, data);
+            const response = await axios.post(`https://tplinux.taile388eb.ts.net/add-entry`, data);
             
             if (response.data.status === "success") {
                 setDate('');
